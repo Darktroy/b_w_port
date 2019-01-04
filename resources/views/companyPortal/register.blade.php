@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title> Business Way </title>
+    <title>T Business Way </title>
 
     <!-- Bootstrap core CSS-->
     <link href="{{ asset('companyPortal/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">

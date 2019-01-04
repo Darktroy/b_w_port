@@ -45,7 +45,8 @@ class company extends Model
                   'company_speciality',
                   'company_countary',
                   'company_city',
-                  'company_district'
+                  'company_district',
+                'company_tax_card','company_registery','user_id'
               ];
 
     /**

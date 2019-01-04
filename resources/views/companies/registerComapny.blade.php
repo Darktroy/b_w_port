@@ -73,7 +73,9 @@
                         @endif
 
             <form method="POST" action="{{ route('companies.company.store') }}" 
-                  accept-charset="UTF-8" id="create_company_form" name="create_company_form" class="contact100-form validate-form">
+                  enctype="multipart/form-data"
+                  accept-charset="UTF-8" id="create_company_form" name="create_company_form"
+                  class="contact100-form validate-form">
                 
 
             {{ csrf_field() }}

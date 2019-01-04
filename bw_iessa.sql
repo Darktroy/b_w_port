@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 29, 2018 at 05:29 PM
+-- Generation Time: Jan 02, 2019 at 09:15 AM
 -- Server version: 10.1.28-MariaDB
 -- PHP Version: 7.1.10
 
@@ -46,7 +46,51 @@ INSERT INTO `activation_processes` (`id`, `activationcode`, `user_id`, `created_
 (4, 'a111', 12, '2018-08-20 00:27:16', '2018-08-20 00:27:16', NULL),
 (5, 'a111', 15, '2018-09-10 06:26:04', '2018-09-10 06:26:04', NULL),
 (6, 'a111', 1, '2018-11-24 09:16:03', '2018-11-24 09:16:03', NULL),
-(7, 'a111', 16, '2018-11-24 14:02:17', '2018-11-24 14:02:17', NULL);
+(7, 'a111', 16, '2018-11-24 14:02:17', '2018-11-24 14:02:17', NULL),
+(9, 'a111', 18, '2018-12-02 02:15:47', '2018-12-02 02:15:47', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `activity_description`
+--
+
+CREATE TABLE `activity_description` (
+  `id` int(4) NOT NULL,
+  `description` varchar(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=ucs2;
+
+--
+-- Dumping data for table `activity_description`
+--
+
+INSERT INTO `activity_description` (`id`, `description`) VALUES
+(1, 'newPassword'),
+(2, 'createCardHolder');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `branchs`
+--
+
+CREATE TABLE `branchs` (
+  `branch_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `company_id` int(10) UNSIGNED DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `branchs`
+--
+
+INSERT INTO `branchs` (`branch_id`, `created_at`, `updated_at`, `company_id`, `name`, `address`) VALUES
+(1, '2018-12-25 04:48:27', '2018-12-25 04:48:27', 8, 'wvfennmjnnf', 'fcwe'),
+(2, '2018-12-25 05:03:13', '2018-12-25 05:03:13', 7, 'defb', 'address dfbswv'),
+(3, '2018-12-26 02:29:19', '2018-12-26 02:29:19', 7, 'ac', 'wqec');
 
 -- --------------------------------------------------------
 
@@ -159,7 +203,9 @@ INSERT INTO `card_to_interests` (`card_to_interest_id`, `created_at`, `updated_a
 (6, '2018-09-03 09:31:56', '2018-09-03 09:31:56', 0, 'kora', 14, 15, '1'),
 (7, '2018-09-03 09:33:33', '2018-09-03 09:33:33', 1, 'interest trest 1', 14, 6, '0'),
 (8, '2018-09-03 09:33:33', '2018-09-03 09:33:33', 0, 'kora', 14, 6, '1'),
-(9, '2018-09-03 09:33:37', '2018-09-03 09:33:37', 0, 'kora', 14, 6, '1');
+(9, '2018-09-03 09:33:37', '2018-09-03 09:33:37', 0, 'kora', 14, 6, '1'),
+(10, '2018-12-04 01:57:46', '2018-12-04 01:57:46', 1, 'interest trest 1', 14, 15, '0'),
+(11, '2018-12-04 01:57:46', '2018-12-04 01:57:46', 0, 'kora', 14, 15, '1');
 
 -- --------------------------------------------------------
 
@@ -187,30 +233,43 @@ CREATE TABLE `companies` (
   `company_speciality` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `company_countary` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `company_city` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `company_district` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `company_district` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `company_tax_card` varchar(1024) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `company_registery` varchar(1024) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_id` int(64) NOT NULL,
+  `approve` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `companies`
+--
+
+INSERT INTO `companies` (`company_id`, `created_at`, `updated_at`, `company_name`, `company_logo`, `company_landline`, `company_fax`, `company_address`, `company_website`, `company_about`, `company_facebook`, `company_twitter`, `company_instagram`, `company_youtube`, `company_field`, `company_industry`, `company_speciality`, `company_countary`, `company_city`, `company_district`, `company_tax_card`, `company_registery`, `user_id`, `approve`) VALUES
+(7, '2018-12-24 14:16:18', '2018-12-24 14:16:18', 'dd', NULL, '5555555', '875421574', '128 khlouse', 'http://www.twest.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TC1545668178.jpg', 'RP1545668178.jpg', 27, 0),
+(8, '2018-12-30 11:47:43', '2018-12-30 11:47:43', 'qweqw', NULL, '1455', '1546', 'qweqw', 'qweqw.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TC1546177663.png', 'RP1546177663.png', 28, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `departments`
+-- Table structure for table `departements`
 --
 
-CREATE TABLE `departments` (
-  `department_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE `departements` (
+  `departement_id` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `branch_id` int(10) UNSIGNED DEFAULT NULL,
+  `company_id` int(10) UNSIGNED DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `departments`
+-- Dumping data for table `departements`
 --
 
-INSERT INTO `departments` (`department_id`, `created_at`, `updated_at`, `title`, `email`) VALUES
-(1, NULL, NULL, 'customer satisfy', 'el7ob_koloh@ba7bkWahshtine.a7a'),
-(2, NULL, NULL, 'secretary ', 'elbet_susan_el_shmal@bar.koko');
+INSERT INTO `departements` (`departement_id`, `created_at`, `updated_at`, `branch_id`, `company_id`, `name`) VALUES
+(1, NULL, NULL, 1, 8, 'test 1'),
+(2, NULL, NULL, 1, 8, 'test 2');
 
 -- --------------------------------------------------------
 
@@ -249,6 +308,22 @@ INSERT INTO `interestes` (`interest_id`, `created_at`, `updated_at`, `name`) VAL
 (3, NULL, NULL, 'interest trest 3'),
 (4, NULL, NULL, 'interest trest 4'),
 (5, NULL, NULL, 'interest trest 5');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invitation_contacts`
+--
+
+CREATE TABLE `invitation_contacts` (
+  `invitation_contacts_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `phonecode` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `invited_user_id` int(10) UNSIGNED DEFAULT NULL,
+  `invitation_code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -309,7 +384,13 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (17, '2018_11_19_110500_create_companies_table', 7),
 (18, '2018_11_24_051415_create_resetsteps_table', 8),
 (19, '2018_11_25_204848_create_departments_table', 9),
-(20, '2018_11_29_034537_create_messag_records_table', 10);
+(20, '2018_11_29_034537_create_messag_records_table', 10),
+(21, '2018_11_30_050432_create_recent_activities_table', 11),
+(22, '2018_11_30_162408_create_invitation_contacts_table', 12),
+(23, '2018_12_02_044138_create_stagings_table', 13),
+(24, '2018_12_24_164603_create_branchs_table', 14),
+(25, '2018_12_25_080902_create_departements_table', 15),
+(26, '2018_12_30_115731_create_user_to_companies_table', 16);
 
 -- --------------------------------------------------------
 
@@ -341,6 +422,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 ('33e936a92a3a925a408b0f206e7908845e392c0f2d08d674351df5e566919617d918dda64376a89c', 1, 5, 'LaraPassport', '[]', 0, '2018-11-24 07:21:14', '2018-11-24 07:21:14', '2019-11-24 09:21:14'),
 ('4defcf43c54d1ae2b0bd84ce6c0ae3f5b82cc74078378c9bef172733edcc56f2009830cea689df36', 15, 5, 'LaraPassport', '[]', 0, '2018-09-10 04:26:04', '2018-09-10 04:26:04', '2019-09-10 06:26:04'),
 ('4f711b06fea85c8817f25d2db18898a45ea4a8eb294971b6647a2388d298132fe873469257d86610', 3, 5, 'LaraPassport', '[]', 0, '2018-08-06 08:14:09', '2018-08-06 08:14:09', '2019-08-06 10:14:09'),
+('54c7b4f4b069942713c5a331302ae00e17f3c9e3d31eba8531c33971dbe14b34b6abe727b00a1286', 18, 5, 'LaraPassport', '[]', 0, '2018-12-02 00:15:47', '2018-12-02 00:15:47', '2019-12-02 02:15:47'),
 ('6149db1706ce32d42fe0ef49cf64c86d0485780eeef295cdc8f11197137c978f65ef5f62243484b7', 5, 5, 'LaraPassport', '[]', 0, '2018-08-07 13:18:16', '2018-08-07 13:18:16', '2019-08-07 15:18:16'),
 ('658707b68df5974dfec40d1f28056fbecc51b08f702c9fd0b82583d9b9ce7aa4b38537c5ec5ae7ff', 13, 5, 'LaraPassport', '[]', 0, '2018-08-22 05:43:46', '2018-08-22 05:43:46', '2019-08-22 07:43:46'),
 ('6a1b320d7dcb69c223b484eeb27393e86055fb530ab29b9e2ad8069d5658bb4d8bf0afd4615caad4', 8, 5, 'LaraPassport', '[]', 0, '2018-08-11 07:32:14', '2018-08-11 07:32:14', '2019-08-11 09:32:14'),
@@ -488,6 +570,29 @@ INSERT INTO `profiles` (`profile_id`, `created_at`, `updated_at`, `user_id`, `la
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `recent_activities`
+--
+
+CREATE TABLE `recent_activities` (
+  `recent_activity_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
+  `action_by_user_id` int(10) UNSIGNED DEFAULT NULL,
+  `description` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `profile_image_url` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `recent_activities`
+--
+
+INSERT INTO `recent_activities` (`recent_activity_id`, `created_at`, `updated_at`, `user_id`, `action_by_user_id`, `description`, `profile_image_url`) VALUES
+(1, '2018-12-02 00:15:47', '2018-12-02 00:15:47', 0, 18, 'registered', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `requests`
 --
 
@@ -521,6 +626,23 @@ CREATE TABLE `resetsteps` (
 
 INSERT INTO `resetsteps` (`resetsteps_id`, `created_at`, `updated_at`, `email`, `confirmation_code`, `confirmation_link`, `temp_pass`) VALUES
 (1, '2018-11-24 05:30:16', '2018-11-24 07:08:53', 'eng.iessa.mostafa300720182320@gmail.com', 'androw12345', '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');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stagings`
+--
+
+CREATE TABLE `stagings` (
+  `staging_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `registration` int(1) DEFAULT '0',
+  `active_account` int(1) DEFAULT '0',
+  `creation_own_profile` int(1) DEFAULT '0',
+  `creation_own_card` int(1) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -560,20 +682,18 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `first_name`, `last_name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`, `active`) VALUES
-(1, 'wintop-admin', '', '', 'eng.iessa.mostafa300720182320@gmail.com', '$2y$10$4jUfHYb1e7UoUJVXPyjp0.b/xCBM/wyTTg88QnfL1Gfa1W/H2t0cq', NULL, '2018-08-06 06:26:25', '2018-11-24 07:21:13', 0),
-(2, 'wintop-admin', '', '', 'eng.iessa.mostafa3400720182320@gmail.com', '$2y$10$p7GVK3IYoM0UCQ8i2oN.SeWX.Ajrdw1JGVqj1K.48d6ewa6cuZTeq', NULL, '2018-08-06 07:51:24', '2018-08-06 07:51:24', 0),
-(3, 'wintop-admin', '', '', 'eng.iessa.mostafa34007201d82320@gmail.com', '$2y$10$NkxZUCfcG5MmKKl0Ere/Gu01ifA6LkJczSdIv2AgkEoZCmWsBpvoq', NULL, '2018-08-06 08:14:08', '2018-08-06 08:14:08', 0),
-(5, 'wintop-admin', '', '', 'eng.iessa.mostafa07Aug2018@gmail.com', '$2y$10$dET2WthIBaEbUdIHkft1bu6ioQbrPXQd9/BqjkJ2NTzADoHi2PrLi', NULL, '2018-08-07 13:18:16', '2018-08-07 13:18:16', 0),
-(7, 'wintop-admin', '', '', 'eng.iessa.mostafa07Aug20182@gmail.com', '$2y$10$3Ccj7SWF60omtkETSVku6uABSyyUh1jKdHVWU.RV.TCRyLn4Q0/R.', NULL, '2018-08-07 13:46:56', '2018-08-07 13:46:56', 0),
-(8, 'wintop-admin', '', '', 'eng.iessa.mostafa090820182320@gmail.com', '$2y$10$Z6xFLsBf3VXcNFrgxrn/rezw9YBfK1jBiLJHFJRQ7LDemFD8aoF5K', NULL, '2018-08-09 01:35:19', '2018-08-09 02:03:54', 1),
-(9, 'wintop-admin', 'wintop-admin', 'dd', 'eng.iessa.mostafa160820182320@gmail.com', '$2y$10$C9RftD3IzZAbBUvQGPc1R.zWuQ6BZrYm9S1rmZyA05OcSWsR0JAZe', NULL, '2018-08-16 06:38:07', '2018-08-16 06:38:33', 1),
-(10, 'wintop-admin', 'wintop-admin', 'dd', 'eng.iessa.mostafa190820181@gmail.com', '$2y$10$xkYHDd3M0wusQU7p1IVjNedXGan644Fw3ex6qkKqb00uA1FPKG9Gq', NULL, '2018-08-19 13:21:30', '2018-08-19 13:39:00', 1),
-(11, 'wintop-admin', 'wintop-admin', 'dd', 'eng.iessa.mostafa190820182@gmail.com', '$2y$10$N157CsUEM1IJLEY/V3Xo8exdYdBUmkZY4PZDJPnDhao3.JfRCp/nO', NULL, '2018-08-19 22:27:00', '2018-08-19 22:27:34', 1),
-(12, 'wintop-admin', 'wintop-admin', 'dd', 'eng.iessa.mostafa19082013@gmail.com', '$2y$10$Wlq7sP6XraUW1U8y/7DRKe0DaJp3Ydz2806VoWW5eFpS8SQvXzA2K', NULL, '2018-08-19 22:27:16', '2018-08-19 22:27:16', 0),
-(13, 'wintop-admin', 'wintop-admin', 'dd', 'eng.iessa.mostafa22082013@gmail.com', '$2y$10$fu/u5VdoMNDF6LsgeECIfeVFlwzRyJ22RcNByoYfGwNYOiN.sjz/C', NULL, '2018-08-22 05:43:46', '2018-08-22 05:44:09', 1),
-(14, 'wintop-admin', 'tasht', 'Test me if you can', 'eng.iessa.mostafa25082013@gmail.com', '$2y$10$yUbnQRQjBcGOwD6sYfmv9eyJzhB4FvDIfb9tniVJXrSataEBV1B9y', NULL, '2018-08-25 08:36:49', '2018-08-26 10:27:36', 1),
-(15, 'wintop-admin', 'wintop-admin', 'dd', 'eng.iessa.mostafa29082013@gmail.com', '$2y$10$jF7F9..DlOGRFCrxq2MUq.60BLSMfvRWVZ6g93D2EEstNXaUudE02', NULL, '2018-09-10 04:26:03', '2018-09-10 04:26:03', 0),
-(16, 'wintop-admin', 'wintop-admin', 'dd', 'eng.iessa.mostafa10112013@gmail.com', '$2y$10$20mxG0yfIYbT0WAoFh4RQOYEzuKAiEuhB9uhe/G.KiRapOn0A07IO', NULL, '2018-11-24 12:02:15', '2018-11-24 12:02:15', 0);
+(5, 'Iessa darktroy', 'Iessa', 'darktroy', 'a1@a1.a1', '$2y$10$OwphDVCrQG6LASG/N.XdsuajmEufKL17.oATbtgksYU1QZjOVKN5K', NULL, '2018-12-24 07:30:23', '2018-12-24 07:30:23', 0),
+(16, 'Iessa darktroy', 'Iessa', 'darktroy', 'eng.iessa.mostafa@gmail.com', '$2y$10$k.4Y8jd/ZjzcPZBSdw7MWORYa6kUuTKd8K60lQX7ssTftasrZDk62', NULL, '2018-12-24 13:54:42', '2018-12-24 13:54:42', 0),
+(17, 'wwwwwwwwwwwwwwwwwwwwwwwww wwwwwwwwwwwwwwwwwwwwwwwww', 'wwwwwwwwwwwwwwwwwwwwwwwww', 'wwwwwwwwwwwwwwwwwwwwwwwww', 'wwwwwwwwwwwwwwwwwwwwwwwww@wwwwwwwwwwwwwwwwwwwwwwwww.com', '$2y$10$H6sQPXCQ1VdmFsOjbbr.wOskSA6OUxxH7dmoiXR8Jp6SCn.A.xrTe', NULL, '2018-12-24 14:00:36', '2018-12-24 14:00:36', 0),
+(18, 'werd werd', 'werd', 'werd', 'werd@werd.werd', '$2y$10$64kbOkf08dsN5F1pFYGNQ.PJ3Qnf/vuI4EG/lvu4LUmuxs9aMzbjW', NULL, '2018-12-24 14:03:30', '2018-12-24 14:03:30', 0),
+(19, 'werd2 werd2', 'werd2', 'werd2', 'werd2@werd2.werd2', '$2y$10$rP.dXgJb5I3hLkqSD16eVOhrIxfS9T//8LIXU2u4wsxi.ZyjXFRgm', NULL, '2018-12-24 14:05:17', '2018-12-24 14:05:17', 0),
+(24, 'zs zs', 'zs', 'zs', 'zs@zs.zs', '$2y$10$Phlxcikldnj9CtuKNOEHE.HGYLBQ/1BzWtoXF1.pgAP.wLmsjfEQS', NULL, '2018-12-24 14:11:15', '2018-12-24 14:11:15', 0),
+(27, 'zsd zsd', 'zsd', 'zsd', 'zsd@zsd.zsd', '$2y$10$BtifMqHz5dJLBtw.gqfNTOqMBH0ocI1S.DBlUH9FsykV2v2xPT.XC', 'X0fPd0hOl67pDiSI0Li5u9XBUr3wTlM8jQnqxyRev5DT1IPVsleMtZlqlBQp', '2018-12-24 14:16:18', '2018-12-24 14:16:18', 0),
+(28, 'qweqw qweqw', 'qweqw', 'qweqw', 'qweqw@qweqw.qweqw', '$2y$10$cbD4EcMZdF5gvXommT.Gee7EGOytJMl9BO6VPPwFgvmeb.8FT0hHO', '0YwNNhkwBgZ2VSwxAF5kYy89v4INtNyLd8JfI7JhXkd0mYAB8Pqn3i6iXNWb', '2018-12-30 11:47:43', '2018-12-30 11:47:43', 0),
+(29, 'ftest ltest', 'ftest', 'ltest', 'test@test.test', '$2y$10$ngWGujpEH5CAANDe1CG0..QL.itnnhZTYX3ZPj6yTaCQXIrXygHHa', NULL, '2019-01-02 05:07:00', '2019-01-02 05:07:00', 0),
+(30, 'jan1 jan1', 'jan1', 'jan1', 'jan1@jan1.jan1', '$2y$10$MsCLghpzDfHtnf1jrA3oye2.20gP/TxwW2/lPnwvdgVEkDFfwKroC', NULL, '2019-01-02 05:14:47', '2019-01-02 05:14:47', 0),
+(31, 'jan2 jan2', 'jan2', 'jan2', 'jan2@jan2.jan2', '$2y$10$KAwWiw31B23LkxrKnCpKfuau73UH6Zx2R6WnXHowOkEmbkJFhrmfG', NULL, '2019-01-02 05:16:37', '2019-01-02 05:16:37', 0),
+(32, 'jan3 jan3', 'jan3', 'jan3', 'jan3@jan3.jan3', '$2y$10$..tQNwzIWST9RT6Gl2CiYOLRHDPDIc0nUDGl.yHn6MsHtC36UP3Jq', NULL, '2019-01-02 05:18:02', '2019-01-02 05:18:02', 0);
 
 -- --------------------------------------------------------
 
@@ -590,15 +710,31 @@ CREATE TABLE `user_cards` (
   `card_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `user_cards`
+-- Table structure for table `user_to_companies`
 --
 
-INSERT INTO `user_cards` (`user_card_id`, `created_at`, `updated_at`, `user_id`, `card_holder_id`, `card_id`) VALUES
-(5, '2018-09-03 03:36:46', '2018-09-03 03:36:46', 8, 0, 17),
-(6, '2018-09-03 03:36:46', '2018-09-03 03:36:46', 8, 0, 1),
-(7, '2018-09-03 03:36:46', '2018-09-03 03:36:46', 8, 0, 2),
-(8, '2018-09-03 03:36:46', '2018-09-03 03:36:46', 8, 0, 3);
+CREATE TABLE `user_to_companies` (
+  `userToCompany_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `company_id` int(10) UNSIGNED DEFAULT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
+  `role_id` int(11) NOT NULL DEFAULT '1',
+  `departement_id` int(5) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_to_companies`
+--
+
+INSERT INTO `user_to_companies` (`userToCompany_id`, `created_at`, `updated_at`, `company_id`, `user_id`, `role_id`, `departement_id`) VALUES
+(1, '2018-12-30 11:47:43', '2018-12-30 11:47:43', 8, 28, 1, 0),
+(2, '2019-01-02 05:14:47', '2019-01-02 05:14:47', 8, 30, 2, 1),
+(3, '2019-01-02 05:16:37', '2019-01-02 05:16:37', 8, 31, 2, 2),
+(4, '2019-01-02 05:18:02', '2019-01-02 05:18:02', 8, 32, 2, 1);
 
 --
 -- Indexes for dumped tables
@@ -609,6 +745,19 @@ INSERT INTO `user_cards` (`user_card_id`, `created_at`, `updated_at`, `user_id`,
 --
 ALTER TABLE `activation_processes`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `activity_description`
+--
+ALTER TABLE `activity_description`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `branchs`
+--
+ALTER TABLE `branchs`
+  ADD PRIMARY KEY (`branch_id`),
+  ADD KEY `branchs_company_id_index` (`company_id`);
 
 --
 -- Indexes for table `cards`
@@ -635,13 +784,16 @@ ALTER TABLE `card_to_interests`
 -- Indexes for table `companies`
 --
 ALTER TABLE `companies`
-  ADD PRIMARY KEY (`company_id`);
+  ADD PRIMARY KEY (`company_id`),
+  ADD UNIQUE KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `departments`
+-- Indexes for table `departements`
 --
-ALTER TABLE `departments`
-  ADD PRIMARY KEY (`department_id`);
+ALTER TABLE `departements`
+  ADD PRIMARY KEY (`departement_id`),
+  ADD KEY `departements_branch_id_index` (`branch_id`),
+  ADD KEY `departements_company_id_index` (`company_id`);
 
 --
 -- Indexes for table `faqs`
@@ -654,6 +806,13 @@ ALTER TABLE `faqs`
 --
 ALTER TABLE `interestes`
   ADD PRIMARY KEY (`interest_id`);
+
+--
+-- Indexes for table `invitation_contacts`
+--
+ALTER TABLE `invitation_contacts`
+  ADD PRIMARY KEY (`invitation_contacts_id`),
+  ADD KEY `invitation_contacts_invited_user_id_index` (`invited_user_id`);
 
 --
 -- Indexes for table `messag_records`
@@ -715,6 +874,14 @@ ALTER TABLE `profiles`
   ADD PRIMARY KEY (`profile_id`);
 
 --
+-- Indexes for table `recent_activities`
+--
+ALTER TABLE `recent_activities`
+  ADD PRIMARY KEY (`recent_activity_id`),
+  ADD KEY `recent_activities_user_id_index` (`user_id`),
+  ADD KEY `recent_activities_action_by_user_id_index` (`action_by_user_id`);
+
+--
 -- Indexes for table `requests`
 --
 ALTER TABLE `requests`
@@ -727,6 +894,13 @@ ALTER TABLE `requests`
 --
 ALTER TABLE `resetsteps`
   ADD PRIMARY KEY (`resetsteps_id`);
+
+--
+-- Indexes for table `stagings`
+--
+ALTER TABLE `stagings`
+  ADD PRIMARY KEY (`staging_id`),
+  ADD KEY `stagings_user_id_index` (`user_id`);
 
 --
 -- Indexes for table `terms`
@@ -751,6 +925,14 @@ ALTER TABLE `user_cards`
   ADD KEY `user_cards_card_id_index` (`card_id`);
 
 --
+-- Indexes for table `user_to_companies`
+--
+ALTER TABLE `user_to_companies`
+  ADD PRIMARY KEY (`userToCompany_id`),
+  ADD KEY `user_to_companies_company_id_index` (`company_id`),
+  ADD KEY `user_to_companies_user_id_index` (`user_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -758,7 +940,19 @@ ALTER TABLE `user_cards`
 -- AUTO_INCREMENT for table `activation_processes`
 --
 ALTER TABLE `activation_processes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `activity_description`
+--
+ALTER TABLE `activity_description`
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `branchs`
+--
+ALTER TABLE `branchs`
+  MODIFY `branch_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `cards`
@@ -776,19 +970,19 @@ ALTER TABLE `cards_holders`
 -- AUTO_INCREMENT for table `card_to_interests`
 --
 ALTER TABLE `card_to_interests`
-  MODIFY `card_to_interest_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `card_to_interest_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `company_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `company_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `departments`
+-- AUTO_INCREMENT for table `departements`
 --
-ALTER TABLE `departments`
-  MODIFY `department_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+ALTER TABLE `departements`
+  MODIFY `departement_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `faqs`
@@ -803,6 +997,12 @@ ALTER TABLE `interestes`
   MODIFY `interest_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `invitation_contacts`
+--
+ALTER TABLE `invitation_contacts`
+  MODIFY `invitation_contacts_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `messag_records`
 --
 ALTER TABLE `messag_records`
@@ -812,7 +1012,7 @@ ALTER TABLE `messag_records`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `oauth_clients`
@@ -833,6 +1033,12 @@ ALTER TABLE `profiles`
   MODIFY `profile_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
+-- AUTO_INCREMENT for table `recent_activities`
+--
+ALTER TABLE `recent_activities`
+  MODIFY `recent_activity_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `requests`
 --
 ALTER TABLE `requests`
@@ -845,6 +1051,12 @@ ALTER TABLE `resetsteps`
   MODIFY `resetsteps_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `stagings`
+--
+ALTER TABLE `stagings`
+  MODIFY `staging_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `terms`
 --
 ALTER TABLE `terms`
@@ -854,13 +1066,19 @@ ALTER TABLE `terms`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `user_cards`
 --
 ALTER TABLE `user_cards`
-  MODIFY `user_card_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `user_card_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user_to_companies`
+--
+ALTER TABLE `user_to_companies`
+  MODIFY `userToCompany_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

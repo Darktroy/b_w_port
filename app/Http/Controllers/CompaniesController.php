@@ -1,11 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\User;
 use App\Models\company;
+use App\Models\branchs;
+use App\Models\departement;
+use App\Models\userToCompany;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Hash;
+    use Illuminate\Support\Facades\DB;
+    use Illuminate\Support\Facades\Auth; 
     use Validator;
 use Exception;
 
@@ -35,7 +40,63 @@ class CompaniesController extends Controller
         
         return view('companies.registerComapny');
     }
-
+//          createEmployee
+    public function createEmployee()
+    {
+        $user = Auth::user();
+        if($user == Null ){
+            redirect(url('/'));
+        }
+        $companyObj = new company();
+        $branchObject = new branchs();
+        $departmentObj = new departement();
+        $branches = $branchObject->showAll($user->id);//28
+        $departements = $departmentObj->showDepartementsOfCompany($user->id);
+        return view('companyadminpanel.createEmployee', compact('branches','departements'));
+    }
+    
+    public function storeEmployee(Request $request) {
+        
+        $user = Auth::user();
+        if($user == Null ){
+            redirect(url('/'));
+        }
+        $companyId = userToCompany::where('user_id',$user->id)->first();
+//        return self::where('company_id', $companyId->company_id)->get();
+         $validator = Validator::make($request->all(), [ 
+                      'first_name' => 'required', 
+                      'last_name' => 'required', 
+                      'phone' => 'required', 
+                      'email' => 'required|email|unique:users,email', 
+                      'password' => 'required', 
+                      'c_password' => 'required|same:password', 
+                    ]);
+                    if ($validator->fails()) { 
+//                      return response()->json(['data'=>$validator->errors(),'status'=>'erroe','status-code'=>'403','code'=>100],200);
+                        
+                    return back()->withInput()
+                            ->withErrors(['unexpected_error' =>$validator->errors()]);
+                    }
+                    $postArray = $request->all(); 
+                    $postArray['name'] = $postArray['first_name'].' '.$postArray['last_name'];
+                    $postArray['first_name'] = $postArray['first_name'];
+                    $postArray['last_name'] = $postArray['last_name'];
+                    $postArray['email'] = $postArray['email'];
+//                    $postArray['password'] = bcrypt($postArray['password']); 
+                    $postArray['password'] = Hash::make($postArray['password']); 
+                    $user = User::create($postArray); 
+                    $usertocompany = userToCompany::create(array('user_id'=>$user->id,
+                        'departement_id'=>$postArray['departement_id'],'role_id'=>2,'company_id'=>$companyId->company_id));
+                    
+        $companyObj = new company();
+        $branchObject = new branchs();
+        $departmentObj = new departement();
+        $branches = $branchObject->showAll($user->id);//28
+        $departements = $departmentObj->showDepartementsOfCompany($user->id);
+        return view('companyadminpanel.createEmployee', compact('branches','departements'));
+//            dd($usertocompany);
+                    return $user;
+    }
     /**
      * Store a new company in the storage.
      *
@@ -47,31 +108,43 @@ class CompaniesController extends Controller
     {
         $companyObj = new self();
         try {
-            /*
-           
-    "company_name" => "d"
-    "company_registry_paper" => "مطابخ.png"
-    "company_tax_card" => "مج شوربه.png"
-    "company_landline" => "255"
-    "company_fax" => "45"
-    "company_address" => "asc54 875"
-    "company_website" => "http://www.twest.com"
-            */
-            DB::beginTransaction();
+        DB::beginTransaction();
 
-            $companyObj->createUser($request);
-            
-            $data = $this->getData($request);
-            dd($data);
-            company::create($data);
+        $userdetails = $companyObj->createUser($request);
+       $data = $request->all();
+        $data = $this->getData($request);
+        if ($data->fails()) { 
+            throw new Exception();
+        }
+       $data = $request->all();  
+       if($request->hasFile("company_registry_paper")){
+                if (isset($data['company_registry_paper']) &&!empty($data['company_registry_paper'])){ 
+                    $imageName = 'RP'.time().'.'.$data['company_registry_paper']->getClientOriginalExtension();
+                    $data['company_registry_paper']->move(public_path('/companyregistrypaper'), $imageName);
+                    $data['company_registery']=$imageName;    
+                } 
+            }
+       if($request->hasFile("company_tax_card")){
+                if (isset($data['company_tax_card']) &&!empty($data['company_tax_card'])){ 
+                     
+                    $imageName = 'TC'.time().'.'.$data['company_tax_card']->getClientOriginalExtension();
+                    $data['company_tax_card']->move(public_path('/companytaxcard'), $imageName);
+                    $data['company_tax_card']=$imageName;   
+                } 
+            }
+            $data['user_id']= $userdetails['id'];
+            $compayDetails = company::create($data);
+            \App\Models\userToCompany::create(array("company_id"=>$compayDetails['company_id'] ,
+                "user_id"=>$data['user_id'],"role_id"=>1));
             DB::commit();
             return redirect()->route('companies.company.index')
                              ->with('success_message', 'Company was successfully added!');
 
-        } catch (Exception $exception) {
+        } catch (Exception $exception) { 
               DB::rollBack();
             return back()->withInput()
-                         ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request!']);
+                         ->withErrors(['unexpected_error' => $exception->getMessage()]);
+//                         ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request!']);
         }
     }
     
@@ -95,10 +168,12 @@ class CompaniesController extends Controller
                     $postArray['name'] = $postArray['admin_first_name'].' '.$postArray['admin_last_name'];
                     $postArray['first_name'] = $postArray['admin_first_name'];
                     $postArray['last_name'] = $postArray['admin_last_name'];
+                    $postArray['email'] = $postArray['admin_email'];
 //                    $postArray['password'] = bcrypt($postArray['password']); 
                     $postArray['password'] = Hash::make($postArray['password']); 
                     $user = User::create($postArray); 
-                    $success['token'] =  $user->createToken('LaraPassport')->accessToken; 
+                    return $user;
+//                    $success['token'] =  $user->createToken('LaraPassport x')->accessToken; 
                     
                     }
     
@@ -190,26 +265,27 @@ class CompaniesController extends Controller
      */
     protected function getData(Request $request)
     {
-      /**/
+      
         $rules = [
-           'company_card_template' => 'file|min:1',
-            'company_name' => 'string|min:1',
-            'company_logo' => 'file|min:1',
-            'company_landline' => 'string|min:1',
-            'company_fax' => 'string|min:1|nullable',
-            'company_address' => 'string|min:1',
+//           'company_card_template' => 'file|min:1',
+            'company_name' => 'required|string|min:1',
+            'company_registry_paper' => 'required|file',
+            'company_tax_card' => 'required|file',
+            'company_landline' => 'required|string|min:1',
+            'company_fax' => 'required|string|min:1|nullable',
+            'company_address' => 'required|string|min:1',
             'company_website' => 'string|min:1',
-            'company_about' => 'string|min:1',
-            'company_facebook' => 'string|min:1|nullable',
-            'company_twitter' => 'string|min:1|nullable',
-            'company_instagram' => 'string|min:1|nullable',
-            'company_youtube' => 'string|min:1|nullable',
-            'company_field' => 'string|min:1',
-            'company_industry' => 'string|min:1',
-            'company_speciality' => 'string|min:1',
-            'company_countary' => 'string',
-            'company_city' => 'string|min:1',
-            'company_district' => 'string|min:1', 
+//            'company_about' => 'string|min:1',
+//            'company_facebook' => 'string|min:1|nullable',
+//            'company_twitter' => 'string|min:1|nullable',
+//            'company_instagram' => 'string|min:1|nullable',
+//            'company_youtube' => 'string|min:1|nullable',
+//            'company_field' => 'string|min:1',
+//            'company_industry' => 'string|min:1',
+//            'company_speciality' => 'string|min:1',
+//            'company_countary' => 'string',
+//            'company_city' => 'string|min:1',
+//            'company_district' => 'string|min:1', 
      
         ];
         
