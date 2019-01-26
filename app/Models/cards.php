@@ -51,7 +51,9 @@ class cards extends Model
                     'facebook_url',
                     'twitter_url',
                     'instagram_url',    
-                    'youtube_url'
+                    'youtube_url',
+                    'company_id',
+                    'gender'
               ];
 
     /**

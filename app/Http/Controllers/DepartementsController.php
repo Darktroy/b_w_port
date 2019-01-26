@@ -94,7 +94,6 @@ class DepartementsController extends Controller
         // showEmployeeListOfDepartements
         $dep_obj = new departement();
         $employeeList = $dep_obj->showEmployeeListOfDepartements($user->id, $id);
-
         return view('companyadminpanel.employeeListIndex', compact('employeeList'));
     }
      

@@ -1,3 +1,4 @@
+
 @extends('companyadminpanel.masterLayout')
 @section('content')
    
@@ -12,6 +13,7 @@
                     <tr>
                       <th>Employee Name</th>
                       <th>email</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -21,6 +23,7 @@
 <!--                            <td><a href="{{url('/departments/show/')}}">{{$emp['name']}}</a></td>-->
                             <td><a href="{{url('')}}">{{$emp['name']}}</a></td>
                             <td>{{$emp['email']}}</td>
+                            <td><a href="{{url('/editEmployee/'.$emp['email'])}}">Edit</a>&nbsp;,&nbsp;<a href="{{url('/blockEmployee/'.$emp['email'])}}">Block</a></td>
                         </tr>
                     @endforeach
 

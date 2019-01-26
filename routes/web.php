@@ -21,16 +21,21 @@ Route::get('/', function () {
     Route::middleware('auth:web')->group(function(){
             
             Route::get('/home', 'HomeController@index')->name('home');
+            Route::get('/editEmployee/{userEmail}','employee@show');
+            Route::post('employeeUpdate/{userEmail}','employee@update');
             
             Route::group([ 'prefix' => 'companies',], function () {
+                Route::get('/list-Employees','employee@showAll');
                 Route::get('/', 'CompaniesController@index')->name('companies.company.index');
 //                Route::get('/create','CompaniesController@create')->name('companies.company.create');
                 Route::get('/createEmployee','CompaniesController@createEmployee')->name('companies.company.createEmployee');
                 Route::get('/show','CompaniesController@show')->name('companies.company.show');
-                Route::get('/showDetails','CompaniesController@show')->name('companies.company.show');
+                Route::get('/showDetails','CompaniesController@showDetails')->name('companies.company.show');
                 Route::get('/{company}/edit','CompaniesController@edit')->name('companies.company.edit')->where('id', '[0-9]+');
 //                Route::post('/', 'CompaniesController@store')->name('companies.company.store');
+                Route::post('/update', 'CompaniesController@updateCompany')->name('companies.company.store');
                 Route::post('/storeEmployee', 'CompaniesController@storeEmployee')->name('companies.company.storeEmloyee');
+                Route::post('/Updating', 'CompaniesController@companyUpdate');
                 Route::put('company/{company}', 'CompaniesController@update')->name('companies.company.update')->where('id', '[0-9]+');
                 Route::delete('/company/{company}','CompaniesController@destroy')->name('companies.company.destroy')->where('id', '[0-9]+');
             });
@@ -48,6 +53,17 @@ Route::get('/', function () {
             
             Route::group(
             ['prefix' => 'departments',], function () {
+                Route::get('/', 'DepartementsController@index')->name('departments.departments.index');
+                Route::get('/create','DepartementsController@create')->name('departments.departments.create');
+                Route::get('/show/{departments}','DepartementsController@show')->name('departments.departments.show')->where('id', '[0-9]+');
+                Route::get('/showAllDepartements','DepartementsController@showAllDepartements')->name('departments.departments.showAllDepartements');
+                Route::get('/{departments}/edit','DepartementsController@edit')->name('departments.departments.edit')->where('id', '[0-9]+');
+                Route::post('/', 'DepartementsController@store')->name('departments.departments.store');
+                Route::put('departments/{departments}', 'DepartementsController@update')->name('departments.departments.update')->where('id', '[0-9]+');
+                Route::delete('/departments/{departments}','DepartementsController@destroy')->name('departments.departments.destroy')->where('id', '[0-9]+');
+            });
+            Route::group(
+            ['prefix' => 'employee',], function () {
                 Route::get('/', 'DepartementsController@index')->name('departments.departments.index');
                 Route::get('/create','DepartementsController@create')->name('departments.departments.create');
                 Route::get('/show/{departments}','DepartementsController@show')->name('departments.departments.show')->where('id', '[0-9]+');

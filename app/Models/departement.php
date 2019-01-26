@@ -85,8 +85,9 @@ class departement extends Model
     public function showEmployeeListOfDepartements($userId,$depId) {
         $employeesids = null;
         $companyId = userToCompany::where('user_id',$userId)->first();
+//        dd($companyId->company_id);
 //        $data = self::where('company_id', $companyId->company_id)->get();
-        if($depId = 0){
+        if($depId == 0){
             $employeesids = userToCompany::select('user_id as id')->where('company_id', $companyId->company_id)->get()->toArray();
         } else {
             $employeesids = userToCompany::select('user_id as id')->where('company_id', $companyId->company_id)->where('departement_id', $depId)->get()->toArray();

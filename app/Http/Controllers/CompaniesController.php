@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\User;
 use App\Models\company;
+use App\Models\cards;
 use App\Models\branchs;
 use App\Models\departement;
 use App\Models\userToCompany;
@@ -56,46 +57,59 @@ class CompaniesController extends Controller
     }
     
     public function storeEmployee(Request $request) {
-        
-        $user = Auth::user();
-        if($user == Null ){
-            redirect(url('/'));
-        }
-        $companyId = userToCompany::where('user_id',$user->id)->first();
-//        return self::where('company_id', $companyId->company_id)->get();
-         $validator = Validator::make($request->all(), [ 
-                      'first_name' => 'required', 
-                      'last_name' => 'required', 
-                      'phone' => 'required', 
-                      'email' => 'required|email|unique:users,email', 
-                      'password' => 'required', 
-                      'c_password' => 'required|same:password', 
-                    ]);
-                    if ($validator->fails()) { 
-//                      return response()->json(['data'=>$validator->errors(),'status'=>'erroe','status-code'=>'403','code'=>100],200);
-                        
-                    return back()->withInput()
-                            ->withErrors(['unexpected_error' =>$validator->errors()]);
-                    }
-                    $postArray = $request->all(); 
-                    $postArray['name'] = $postArray['first_name'].' '.$postArray['last_name'];
-                    $postArray['first_name'] = $postArray['first_name'];
-                    $postArray['last_name'] = $postArray['last_name'];
-                    $postArray['email'] = $postArray['email'];
-//                    $postArray['password'] = bcrypt($postArray['password']); 
-                    $postArray['password'] = Hash::make($postArray['password']); 
-                    $user = User::create($postArray); 
-                    $usertocompany = userToCompany::create(array('user_id'=>$user->id,
-                        'departement_id'=>$postArray['departement_id'],'role_id'=>2,'company_id'=>$companyId->company_id));
+        try {
+            
+            DB::beginTransaction();
+            $user = Auth::user();
+                if($user == Null ){
+                    redirect(url('/'));
+                }
+                $companyId = userToCompany::with('theCompany')->where('user_id',$user->id)->first();
+                $userAdminId = $user->id;
+                 $validator = Validator::make($request->all(), [ 
+                              'first_name' => 'required', 
+                              'last_name' => 'required', 
+                              'landline' => 'required', 
+                              'fax' => 'required', 
+                              'alias' => 'required', 
+                              'gender' => 'required', 
+                              'phone' => 'required', 
+                              'email' => 'required|email|unique:users,email', 
+                              'password' => 'required', 
+                              'c_password' => 'required|same:password', 
+                            ]);
+                            if ($validator->fails()) { 
+        //                      return response()->json(['data'=>$validator->errors(),'status'=>'erroe','status-code'=>'403','code'=>100],200);
+                                return back()->withInput()->withErrors(['unexpected_error' =>$validator->errors()]);
+                            }
+                            $postArray = $request->all(); 
+                            $postArray['name'] = $postArray['first_name'].' '.$postArray['last_name'];
+                            $postArray['first_name'] = $postArray['first_name'];
+                            $postArray['last_name'] = $postArray['last_name'];
+                            $postArray['email'] = $postArray['email'];
+        //                    $postArray['password'] = bcrypt($postArray['password']); 
+                            $postArray['password'] = Hash::make($postArray['password']); 
+                            $user = User::create($postArray); 
+                            $usertocompany = userToCompany::create(array('user_id'=>$user->id,'departement_id'=>$postArray['departement_id'],'role_id'=>2,'company_id'=>$companyId->company_id));
+                            $userDataCard = cards::create(array('first_name'=>$postArray['first_name'],'last_name'=>$postArray['last_name'],
+                                'company_id'=>$companyId->company_id,'user_id'=>$user->id,
+                                'create_by'=>$userAdminId,'privacy'=>0,'company_name'=>$companyId['theCompany']->company_name,'cell_phone_number'=>$postArray['phone'],'landline'=>$postArray['landline'],'fax'=>$postArray['fax'],'position'=>$postArray['position'],'website_url'=>$companyId['theCompany']->company_website,'personal'=>0,'card_holder_id'=>0,'alias'=>$postArray['alias'],'template_layout_id'=>0,'gender'=>$postArray['gender'],));
                     
-        $companyObj = new company();
-        $branchObject = new branchs();
-        $departmentObj = new departement();
-        $branches = $branchObject->showAll($user->id);//28
-        $departements = $departmentObj->showDepartementsOfCompany($user->id);
-        return view('companyadminpanel.createEmployee', compact('branches','departements'));
-//            dd($usertocompany);
-                    return $user;
+                DB::commit();
+                $companyObj = new company();
+                $branchObject = new branchs();
+                $departmentObj = new departement();
+                $branches = $branchObject->showAll($user->id);//28
+                $departements = $departmentObj->showDepartementsOfCompany($user->id);
+                
+                return view('companyadminpanel.createEmployee', compact('branches','departements'));
+        } catch (Exception $exc) {
+            DB::rollBack();
+//            echo $exc->getTraceAsString();
+            return back()->withInput()->withErrors(['unexpected_error' =>$exc->getMessage()]);
+        }
+
+        
     }
     /**
      * Store a new company in the storage.
@@ -190,6 +204,18 @@ class CompaniesController extends Controller
 
         return view('companies.show', compact('company'));
     }
+    public function showDetails()
+    {
+        $user = Auth::user();
+        if($user == Null ){
+            redirect(url('/'));
+        }
+        $companyId = userToCompany::with('theCompany')->where('user_id',$user->id)->first();
+        
+        $company = company::findOrFail($companyId->company_id);
+
+        return view('companyadminpanel.showEditCompanyProfile', compact('company'));
+    }
 
     /**
      * Show the form for editing the specified company.
@@ -233,6 +259,32 @@ class CompaniesController extends Controller
         }        
     }
 
+     public function companyUpdate( Request $request)
+    {
+        try {
+             $user = Auth::user();
+        if($user == Null ){
+            redirect(url('/'));
+        }
+        $companyId = userToCompany::with('theCompany')->where('user_id',$user->id)->first();
+        
+            $data = $this->getDataUpdating($request);
+            if($data->fails()){
+                throw new Exception($data->errors());
+            }
+            $data = $request->all();
+            $company = company::findOrFail($companyId->company_id);
+            $company->update($data);
+            
+            return redirect()->route('companies.company.index');
+
+        } catch (Exception $exception) {
+
+            return back()->withInput()
+                         ->withErrors(['unexpected_error' => $exception->getMessage()]);
+        }        
+    }
+    
     /**
      * Remove the specified company from the storage.
      *
@@ -299,4 +351,22 @@ class CompaniesController extends Controller
 //        return $data;
     }
 
+    protected function getDataUpdating(Request $request) {
+        
+        $rules = [
+//           'company_card_template' => 'file|min:1',
+            'company_landline' => 'required|string|min:1',
+            'company_fax' => 'required|string|min:1|nullable',
+            'company_address' => 'required|string|min:1',
+            'company_website' => 'string|min:1',
+        ];
+        
+//        $data = $request->validate($rules);
+       
+        $messages =[
+            'picture.required' => 'Please Enter valid picture',
+        ];
+        $data = Validator::make($request->all(), $rules, $messages);
+        return $data;
+    }
 }

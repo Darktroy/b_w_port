@@ -81,8 +81,10 @@
           <div class="dropdown-menu" aria-labelledby="pagesDropdown">
             <h6 class="dropdown-header">Login Screens:</h6>
             <!--<a class="dropdown-item" href={{url("branchs/create")}}>Add Branch </a>-->
+            <a class="dropdown-item" href={{url("companies/showDetails")}}>Company Profile </a>
             <a class="dropdown-item" href={{url("branchs/")}}>Branch </a>
             <a class="dropdown-item" href={{url("branchs/showAllDepartements")}}>Department</a>
+            <a class="dropdown-item" href={{url("companies/list-Employees")}}>Listing Employees </a>
             <a class="dropdown-item" href={{url("companies/createEmployee")}}>Add Employee</a>
             <!--<a class="dropdown-item" href="forgot-password.html">Forgot Password</a>-->
             <div class="dropdown-divider"></div>

@@ -49,9 +49,9 @@ class userToCompany extends Model
     /**
      * Get the company for this model.
      */
-    public function company()
+    public function theCompany()
     {
-        return $this->belongsTo('App\Models\Company','company_id');
+        return $this->belongsTo('App\Models\company','company_id');
     }
 
     /**
